@@ -1,10 +1,23 @@
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 
 @Controller('users') //
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Get(':id')
+  findById(@Param('id', ParseIntPipe) id: string) {
+    return this.usersService.findOne(+id);
+  }
 
   @Post()
   create(
@@ -16,6 +29,6 @@ export class UsersController {
     )
     createUserDTO: CreateUserDTO,
   ) {
-    return this.usersService.createUser(createUserDTO);
+    return this.usersService.create(createUserDTO);
   }
 }
